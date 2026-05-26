@@ -1,80 +1,379 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>血圧体重手帳 - 利用規約</title>
+    <title>血圧体重手帳 — 利用規約</title>
     <style>
+        :root {
+            --accent:   #3a7bd5;
+            --accent2:  #00d2ff;
+            --text:     #1a2233;
+            --sub:      #4a5568;
+            --muted:    #718096;
+            --border:   #e2e8f0;
+            --bg:       #f8fafc;
+            --card:     #ffffff;
+            --radius:   10px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
         body {
-            font-family: "Helvetica Neue", Arial, sans-serif;
-            line-height: 1.6;
-            padding: 20px;
-            max-width: 800px;
+            font-family: "Helvetica Neue", "Hiragino Sans", "Hiragino Kaku Gothic ProN",
+                         "Yu Gothic", Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            font-size: 15px;
+        }
+
+        /* ── Header ── */
+        header {
+            background: linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 60%, #3a7bd5 100%);
+            color: #fff;
+            padding: 48px 24px 40px;
+            text-align: center;
+        }
+        header .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 20px;
+            padding: 4px 14px;
+            font-size: 12px;
+            letter-spacing: 0.08em;
+            margin-bottom: 14px;
+        }
+        header h1 {
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            margin-bottom: 8px;
+        }
+        header p {
+            font-size: 13px;
+            opacity: 0.65;
+        }
+
+        /* ── Main layout ── */
+        main {
+            max-width: 760px;
             margin: 0 auto;
-            color: #333;
+            padding: 40px 20px 80px;
         }
 
-        h1 {
-            color: #2c3e50;
-            border-bottom: 2px solid #3498db;
+        /* ── TOC ── */
+        .toc {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 22px 26px;
+            margin-bottom: 36px;
+        }
+        .toc h2 {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--muted);
+            margin-bottom: 12px;
+        }
+        .toc ol {
+            padding-left: 18px;
+        }
+        .toc li {
+            margin-bottom: 4px;
+        }
+        .toc a {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 13.5px;
+        }
+        .toc a:hover { text-decoration: underline; }
+
+        /* ── Section card ── */
+        section {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px 28px 24px;
+            margin-bottom: 20px;
+            scroll-margin-top: 20px;
+        }
+        section h2 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 14px;
             padding-bottom: 10px;
+            border-bottom: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        section h2 .num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--accent);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        section p {
+            color: var(--sub);
+            margin-bottom: 12px;
+        }
+        section p:last-child { margin-bottom: 0; }
+
+        /* ── Lists ── */
+        ol.items, ul.items {
+            padding-left: 0;
+            list-style: none;
+        }
+        ol.items li, ul.items li {
+            color: var(--sub);
+            padding: 8px 0 8px 20px;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+        }
+        ol.items li:last-child, ul.items li:last-child { border-bottom: none; }
+        ol.items { counter-reset: item; }
+        ol.items li::before {
+            counter-increment: item;
+            content: counter(item) ".";
+            position: absolute;
+            left: 0;
+            font-weight: 600;
+            color: var(--accent);
+            font-size: 13px;
+        }
+        ul.items li::before {
+            content: "•";
+            position: absolute;
+            left: 4px;
+            color: var(--accent);
+            font-size: 16px;
+            line-height: 1.5;
         }
 
-        h2 {
-            color: #34495e;
-            margin-top: 30px;
+        /* ── Callout boxes ── */
+        .callout {
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin: 14px 0;
+            font-size: 13.5px;
+        }
+        .callout.info {
+            background: #eff6ff;
+            border-left: 3px solid var(--accent);
+            color: #1e40af;
+        }
+        .callout.warn {
+            background: #fffbeb;
+            border-left: 3px solid #f59e0b;
+            color: #92400e;
+        }
+        .callout.danger {
+            background: #fef2f2;
+            border-left: 3px solid #ef4444;
+            color: #991b1b;
         }
 
-        p {
-            margin-bottom: 15px;
+        /* ── Contact card ── */
+        .contact-card {
+            background: linear-gradient(135deg, #f0f7ff 0%, #e8f4fd 100%);
+            border: 1px solid #bfdbfe;
+            border-radius: var(--radius);
+            padding: 20px 24px;
         }
+        .contact-card p { color: var(--sub); margin-bottom: 6px; }
+        .contact-card a { color: var(--accent); text-decoration: none; }
+        .contact-card a:hover { text-decoration: underline; }
 
-        ol {
-            margin-bottom: 15px;
+        /* ── Footer ── */
+        footer {
+            text-align: center;
+            padding: 32px 20px;
+            font-size: 12px;
+            color: var(--muted);
+            border-top: 1px solid var(--border);
+            margin-top: 20px;
         }
+        footer strong { color: var(--sub); }
     </style>
 </head>
-
 <body>
+
+<header>
+    <div class="badge">Legal Document</div>
     <h1>利用規約</h1>
-    <p>この利用規約（以下「本規約」）は、Metamorph（以下「当方」）が提供するアプリケーション「血圧体重手帳」（以下「本アプリ」）の利用条件を定めるものです。利用者の皆様（以下「ユーザー」）には、本規約に従って本アプリをご利用いただきます。
-    </p>
+    <p>血圧体重手帳 &nbsp;|&nbsp; Metamorph &nbsp;|&nbsp; 制定日：2026年5月26日</p>
+</header>
 
-    <h2>第1条（適用）</h2>
-    <p>本規約は、ユーザーと当方との間の本アプリの利用に関わる一切の関係に適用されるものとします。</p>
+<main>
 
-    <h2>第2条（医療情報の非該当性）</h2>
-    <p>本アプリは、日々の血圧や体重等の記録・管理をサポートするものであり、医療行為や診断を行うものではありません。本アプリが提供する情報は、医師の助言や指導に代わるものではありません。</p>
+    <!-- 前文 -->
+    <div class="callout info" style="margin-bottom:28px;">
+        この利用規約（以下「本規約」）は、Metamorph（以下「当方」）が提供するiOSアプリケーション「血圧体重手帳」（以下「本アプリ」）のご利用条件を定めるものです。本アプリをインストール・使用された時点で、本規約に同意されたものとみなします。
+    </div>
 
-    <h2>第3条（有料プラン）</h2>
-    <ol>
-        <li>本アプリでは、プロ機能を有料（App内課金）で提供しています。</li>
-        <li>一度購入された有料機能は、同一のApple IDを使用している限り、機種変更後も無料で復元可能です。</li>
-        <li>購入後の返金対応については、Apple社の規定に基づきます。</li>
-    </ol>
+    <!-- 目次 -->
+    <nav class="toc">
+        <h2>目次</h2>
+        <ol>
+            <li><a href="#s1">総則・適用範囲</a></li>
+            <li><a href="#s2">医療情報の非該当性</a></li>
+            <li><a href="#s3">有料プラン（Pro）</a></li>
+            <li><a href="#s4">知的財産権</a></li>
+            <li><a href="#s5">禁止事項</a></li>
+            <li><a href="#s6">免責事項</a></li>
+            <li><a href="#s7">プライバシーとデータ</a></li>
+            <li><a href="#s8">サービスの変更・中断・終了</a></li>
+            <li><a href="#s9">利用規約の変更</a></li>
+            <li><a href="#s10">準拠法・管轄裁判所</a></li>
+            <li><a href="#s11">お問い合わせ</a></li>
+        </ol>
+    </nav>
 
-    <h2>第4条（禁止事項）</h2>
-    <p>ユーザーは、本アプリの利用にあたり、以下の行為をしてはなりません。</p>
-    <ol>
-        <li>法令または公序良俗に違反する行為</li>
-        <li>本アプリの運営を妨害する行為</li>
-        <li>本アプリを複製、修正、リバースエンジニアリングする行為</li>
-    </ol>
+    <!-- 第1条 -->
+    <section id="s1">
+        <h2><span class="num">1</span>総則・適用範囲</h2>
+        <p>本規約は、ユーザーと当方との間で、本アプリの利用に関わる一切の関係に適用されます。</p>
+        <p>本アプリはApple Inc.が運営するApp Storeを通じて配信されます。App Storeの利用規約（Apple Media Services利用規約）も併せて適用されます。本規約と同利用規約が矛盾する場合は、当該事項についてApple側の規約が優先されます。</p>
+        <p>本アプリは日本国内の利用者を主な対象として設計されています。</p>
+    </section>
 
-    <h2>第5条（免責事項）</h2>
-    <p>当方は、本アプリに事実上または法律上の瑕疵（安全性、信頼性、正確性、完全性、有効性、特定の目的への適合性、セキュリティなどに関する欠陥、エラーやバグ、権利侵害などを含みます。）がないことを明示的にも黙示的にも保証しておりません。
-    </p>
-    <p>当方は、本アプリに起因してユーザーに生じたあらゆる損害について一切の責任を負いません。</p>
+    <!-- 第2条 -->
+    <section id="s2">
+        <h2><span class="num">2</span>医療情報の非該当性</h2>
+        <p>本アプリは、血圧・体重・脈拍等の日常的な健康データをユーザー自身が記録・管理するためのツールです。</p>
+        <div class="callout warn">
+            本アプリが提供する情報・数値・グラフ・レポートは、いかなる意味においても医療診断、治療方針の決定、または医師の助言の代替を意図するものではありません。健康上の問題については、必ず医師または医療専門家にご相談ください。
+        </div>
+        <p>本アプリのPDF出力機能は、診察時の補助資料として医師に提示することを想定していますが、その内容の医学的判断はすべて担当医師が行うものとし、当方はその判断に対して一切の責任を負いません。</p>
+    </section>
 
-    <h2>第6条（利用規約の変更）</h2>
-    <p>当方は、必要と判断した場合には、ユーザーに通知することなくいつでも本規約を変更することができるものとします。</p>
+    <!-- 第3条 -->
+    <section id="s3">
+        <h2><span class="num">3</span>有料プラン（Pro）</h2>
+        <ol class="items">
+            <li>本アプリはApp内課金（以下「IAP」）により、追加機能を提供する「Proプラン」を用意しています。Proプランは買い切り型（非消費型）であり、一度の購入で追加料金なく継続利用できます。</li>
+            <li>購入代金は決済完了時にApple IDに紐づく支払い方法へ請求されます。</li>
+            <li>同一のApple IDでサインインしている限り、機種変更・アプリ再インストール後も「購入を復元する」機能により無償で再利用できます。</li>
+            <li>購入後のキャンセルおよび返金については、Apple Inc.のApp Store返金ポリシーに基づきます。当方は独自の返金対応を行いません。</li>
+            <li>Proプランの価格・内容は、当方の判断により変更されることがあります。ただし、購入済みのユーザーが既に取得した機能が遡及的に削減されることはありません。</li>
+            <li>将来追加されるPro機能は、別途告知なく同一Proプランの範囲に含まれることがあります。</li>
+        </ol>
+    </section>
 
-    <h2>第7条（お問い合わせ）</h2>
-    <p>運営者：Metamorph<br>
-        連絡先：keisuke9n@gmail.com</p>
+    <!-- 第4条 -->
+    <section id="s4">
+        <h2><span class="num">4</span>知的財産権</h2>
+        <p>本アプリに含まれるすべてのコード、デザイン、グラフィック、テキスト、ロゴおよびその他のコンテンツに関する知的財産権は、当方または正当な権利者に帰属します。</p>
+        <p>ユーザーは、本規約の範囲内でのみ本アプリを使用する権利を付与されます。この権利は非独占的・非譲渡的・取り消し可能なライセンスです。</p>
+    </section>
 
-    <p style="margin-top: 40px; font-size: 0.8em; color: #777;">制定日：2026年5月26日</p>
+    <!-- 第5条 -->
+    <section id="s5">
+        <h2><span class="num">5</span>禁止事項</h2>
+        <p>ユーザーは以下の行為を行ってはなりません。</p>
+        <ol class="items">
+            <li>法令または公序良俗に違反する行為</li>
+            <li>本アプリのリバースエンジニアリング、逆コンパイル、逆アセンブル、またはそれに類する行為</li>
+            <li>本アプリの全部または一部を複製・改変・再配布する行為</li>
+            <li>本アプリの正常な運営を妨害する行為</li>
+            <li>他者の知的財産権、プライバシーその他の権利を侵害する行為</li>
+            <li>Proプランの購入を不正に回避・共有・転売する行為</li>
+            <li>その他当方が不適切と判断する行為</li>
+        </ol>
+    </section>
+
+    <!-- 第6条 -->
+    <section id="s6">
+        <h2><span class="num">6</span>免責事項</h2>
+        <p>当方は、本アプリについて、正確性・完全性・特定目的への適合性・安全性・継続的な提供・エラーやバグのないことを、明示的にも黙示的にも保証しません。</p>
+        <div class="callout danger">
+            当方は、本アプリの利用またはサービスの変更・中断・終了により生じたいかなる損害（直接損害・間接損害・逸失利益を含む）についても、一切の責任を負いません。
+        </div>
+        <ol class="items">
+            <li>本アプリはiOSバージョンや端末の変化により、一部機能が利用できなくなる場合があります。</li>
+            <li>HealthKitとの連携はApple社の仕様変更により影響を受ける場合があります。</li>
+            <li>PDFレポートの内容は参考情報であり、その利用によって生じた結果に当方は責任を負いません。</li>
+        </ol>
+    </section>
+
+    <!-- 第7条 -->
+    <section id="s7">
+        <h2><span class="num">7</span>プライバシーとデータ</h2>
+        <p>本アプリが収集・処理する個人情報およびヘルスデータの取り扱いについては、別途定めるプライバシーポリシーをご参照ください。</p>
+        <ul class="items">
+            <li>本アプリに記録されたデータは、原則としてユーザーのデバイス内およびユーザー自身のiCloud環境にのみ保存されます。当方のサーバーへのデータ送信は行いません。</li>
+            <li>本アプリはApple HealthKit（ヘルスケア）のデータにアクセスすることがあります。アクセス権限はiOSの設定から変更できます。</li>
+            <li>本アプリが終了・削除された場合、デバイス内のアプリデータは当該操作に従って消去されます。HealthKit上のデータはAppleの管理下に残ります。</li>
+        </ul>
+    </section>
+
+    <!-- 第8条 -->
+    <section id="s8">
+        <h2><span class="num">8</span>サービスの変更・中断・終了</h2>
+        <p>当方は、事業上の理由、法令の変更、技術的事情その他やむを得ない事由により、本アプリの機能変更・提供中断・サービス終了（以下「サービス終了」）を行う権利を留保します。</p>
+
+        <p><strong>8-1. 事前告知</strong></p>
+        <p>サービス終了を予定する場合、当方は可能な限り30日以上前を目安に、App Store上のアプリ説明欄またはアプリ内通知等の手段によりユーザーへの周知を努めます。ただし、緊急性・技術的制約等により告知が困難な場合はこの限りではありません。</p>
+
+        <p><strong>8-2. サービス終了後の扱い</strong></p>
+        <ol class="items">
+            <li>サービス終了後、当方はApp Storeからの配信を停止します。既にインストール済みの場合、iOSのバージョン互換性が維持される範囲でアプリ自体は引き続き動作する可能性がありますが、動作を保証するものではありません。</li>
+            <li>サービス終了後は新規のIAP購入が不可となります。購入済みのProプランはデバイス上で機能する限り引き続き利用できますが、当方はその継続を保証しません。</li>
+            <li>サービス終了を理由とした購入済みIAPの返金は、Apple Inc.のApp Store返金ポリシーに基づく場合を除き、当方は応じません。</li>
+            <li>ユーザーデータはデバイス内またはiCloud内に保持されますが、当方はそのデータの保全・移行に関する義務を負いません。重要なデータは、PDF出力機能等を活用してサービス終了前にバックアップすることを推奨します。</li>
+        </ol>
+
+        <p><strong>8-3. 一時的な中断</strong></p>
+        <p>メンテナンス・障害・iOSアップデート対応等により、本アプリの一部機能が一時的に利用できない場合があります。当方はかかる中断について事前通知を行う義務を負わず、また中断により生じた損害について責任を負いません。</p>
+
+        <div class="callout info">
+            当方はユーザーの記録データがユーザー自身の財産であると考えています。サービス終了前には必ずPDFレポートの出力等によるデータの手元保存を行ってください。
+        </div>
+    </section>
+
+    <!-- 第9条 -->
+    <section id="s9">
+        <h2><span class="num">9</span>利用規約の変更</h2>
+        <p>当方は、必要と判断した場合、本規約をいつでも変更することができます。変更後の規約は、App Store上のアプリ説明ページまたはアプリ内に掲示した時点から効力を生じます。</p>
+        <p>変更後も本アプリを継続してご利用いただいた場合、変更後の規約に同意されたものとみなします。定期的に本ページをご確認ください。</p>
+    </section>
+
+    <!-- 第10条 -->
+    <section id="s10">
+        <h2><span class="num">10</span>準拠法・管轄裁判所</h2>
+        <p>本規約の解釈および適用については、日本国法を準拠法とします。</p>
+        <p>本規約または本アプリに関して生じた紛争については、当方の所在地を管轄する日本国内の裁判所を第一審の専属的合意管轄裁判所とします。</p>
+    </section>
+
+    <!-- 第11条 -->
+    <section id="s11">
+        <h2><span class="num">11</span>お問い合わせ</h2>
+        <div class="contact-card">
+            <p>本規約に関するご質問・ご意見は下記までお問い合わせください。</p>
+            <p><strong>運営者：</strong>Metamorph</p>
+            <p><strong>メール：</strong><a href="mailto:keisuke9n@gmail.com">keisuke9n@gmail.com</a></p>
+            <p style="margin-top:10px; font-size:13px; color:#718096;">通常3営業日以内にご返信いたします。App Storeの購入・返金に関するお問い合わせはApple サポートへお願いします。</p>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <strong>血圧体重手帳</strong> &nbsp;|&nbsp; 運営：Metamorph<br>
+    <span style="margin-top:6px; display:block;">制定日：2026年5月26日 &nbsp;|&nbsp; 最終更新：2026年5月26日</span>
+</footer>
+
 </body>
-
 </html>
